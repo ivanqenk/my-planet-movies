@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Contains custom_movies_normalizer.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_help().
+ */
+function custom_movies_normalizer_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the custom_movies_normalizer module.
+    case 'help.page.custom_movies_normalizer':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This custom module ovverrides normalizer format') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function custom_movies_normalizer_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form_ids = [
+    'node_movie_form',
+    'node_movie_edit_form',
+  ];
+  if (in_array($form_id, $form_ids)) {
+    $form['#attached']['library'][] = 'custom_movies_normalizer/movies';
+    $form['#validate'][] = 'custom_movies_normalizer_form_validate';
+  }
+}
+
+/**
+ * Form validation callback.
+ */
+function custom_movies_normalizer_form_validate($form, FormStateInterface &$form_state) {
+  $date_selected = $form_state->getValue('field_release_date')[0]['value']->format('Y-m-d');
+  $current_date = new DateTime();
+  $release_date = new DateTime($date_selected);
+
+  if ($release_date > $current_date) {
+    $form_state->setErrorByName('field_release_date', t('You cannot select a future release date.'));
+  } 
+}

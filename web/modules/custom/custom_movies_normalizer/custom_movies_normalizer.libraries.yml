@@ -1,0 +1,6 @@
+movies:
+  css:
+    theme:
+      css/custom_movies_normalizer.css: {}
+  js:
+    js/custom_movies_normalizer.js: {}  

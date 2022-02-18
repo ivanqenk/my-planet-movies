@@ -1,0 +1,6 @@
+name: 'custom_movies_serializer'
+type: module
+description: 'This custom module ovverrides serializer format'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: 'Custom'
